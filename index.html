@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Inputs do HTML</h1>
+
+    <form>
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required>
+        <br><br>
+
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email" required>
+        <br><br>
+
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" name="senha" required>
+        <br><br>
+
+        <label>Gênero:</label><br>
+        <label for="masculino">Masculino</label>
+        <input type="radio" name="genero" id="masculino" value="m">
+        <label for="feminino">Feminino</label>
+        <input type="radio" name="genero" id="feminino" value="f">
+        <br><br>
+
+        <label>Interesses:</label><br>
+        <label for="backend">Back-end</label>
+        <input type="checkbox" id="backend" name="interesses" value="backend">
+        <label for="frontend">Front-end</label>
+        <input type="checkbox" id="frontend" name="interesses" value="frontend">
+        <label for="mobile">Mobile</label>
+        <input type="checkbox" id="mobile" name="interesses" value="mobile">
+        <br><br>
+
+        <label for="datadenascimento">Data de nascimento:</label>
+        <input type="date" name="nascimento" id="datadenascimento">
+        <br><br>
+
+        <label for="fotodeperfil">Foto de perfil</label>
+        <input type="file" id="fotodeperfil" name="perfil">
+        <br><br>
+
+        <button type="submit">Enviar</button>
+
+
+    </form>
+</body>
+</html>
