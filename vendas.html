@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tela de Vendas - Demo</title>
+  <style>
+    :root{
+      --bg:#0f1724;
+      --card:#0b1220;
+      --muted:#9aa6bd;
+      --accent:#06b6d4; /* teal */
+      --accent-2:#7c3aed; /* purple */
+      --glass: rgba(255,255,255,0.04);
+      --radius:14px;
+      --max-width:1200px;
+      --gap:18px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: linear-gradient(180deg,#071026 0%, #031226 100%);
+      color:#e6eef8;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:32px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:14px;
+    }
+
+    .app{
+      width:100%;
+      max-width:var(--max-width);
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:20px;
+      padding:28px;
+      box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap:var(--gap);
+      align-items:start;
+    }
+
+    header.top{
+      grid-column:1/-1;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:8px;
+    }
+
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:700;color:#021023}
+    .brand h1{margin:0;font-size:18px}
+    .brand p{margin:0;font-size:12px;color:var(--muted)}
+
+    .search{
+      flex:1;
+      margin:0 18px;
+    }
+    .search input{
+      width:100%;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,0.04);
+      background:var(--glass);
+      color:inherit;
+      outline:none;
+    }
+
+    .filters{display:flex;gap:8px}
+    .filters button{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px 12px;border-radius:10px;color:var(--muted);cursor:pointer}
+
+    /* main product area */
+    .products{
+      background:transparent;
+      padding:8px 0 20px 0;
+      overflow:auto;
+      height:720px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:16px;
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+      border-radius:14px;
+      padding:14px;
+      border:1px solid rgba(255,255,255,0.03);
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .thumb{height:160px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--muted)}
+
+    .title{font-weight:600}
+    .desc{font-size:13px;color:var(--muted);margin-top:6px}
+    .price-row{display:flex;align-items:center;justify-content:space-between;margin-top:auto}
+    .price{font-weight:700;font-size:16px}
+
+    .btn{background:linear-gradient(90deg,var(--accent),var(--accent-2));border:none;padding:10px 12px;border-radius:10px;color:#021023;font-weight:700;cursor:pointer}
+    .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+
+    /* cart sidebar */
+    .cart{
+      background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.02));
+      border-radius:14px;
+      padding:16px;
+      height:720px;
+      border:1px solid rgba(255,255,255,0.03);
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .cart h2{margin:0}
+    .cart-items{flex:1;overflow:auto;display:flex;flex-direction:column;gap:12px;padding-right:6px}
+    .cart-item{display:flex;gap:12px;align-items:center;background:transparent;padding:8px;border-radius:10px}
+    .ci-thumb{width:64px;height:64px;border-radius:8px;background:rgba(255,255,255,0.02);display:flex;align-items:center;justify-content:center;color:var(--muted)}
+    .ci-info{flex:1}
+    .ci-name{font-weight:600}
+    .ci-meta{font-size:13px;color:var(--muted)}
+
+    .total-row{display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid rgba(255,255,255,0.03)}
+    .checkout{display:flex;flex-direction:column;gap:8px}
+    .small{font-size:13px;color:var(--muted)}
+
+    footer{grid-column:1/-1;margin-top:8px;color:var(--muted);font-size:13px;display:flex;justify-content:space-between}
+
+    /* responsive */
+    @media (max-width:1000px){
+      .app{grid-template-columns:1fr 320px}
+      .grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width:760px){
+      body{padding:18px}
+      .app{grid-template-columns:1fr; padding:18px}
+      .products{height:auto}
+      .grid{grid-template-columns:1fr}
+      .cart{height:auto}
+    }
+
+  </style>
+</head>
+<body>
+  <div class="app" role="main">
+
+    <header class="top">
+      <div class="brand">
+        <div class="logo">SV</div>
+        <div>
+          <h1>StoreVendas</h1>
+          <p>Plataforma demo • Checkout rápido</p>
+        </div>
+      </div>
+
+      <div class="search">
+        <input placeholder="Buscar produtos, exemplo: fone bluetooth, camiseta" aria-label="buscar" />
+      </div>
+
+      <div class="filters">
+        <button class="secondary">Filtrar</button>
+        <button class="secondary">Ordenar</button>
+      </div>
+    </header>
+
+    <section class="products">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div>
+          <h2 style="margin:0">Produtos em destaque</h2>
+          <p class="small">Escolha entre os itens mais populares</p>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="secondary">Ver todos</button>
+        </div>
+      </div>
+
+      <div class="grid" aria-live="polite">
+        <!-- produto 1 -->
+        <article class="card">
+          <div class="thumb">Fone Pro X</div>
+          <div class="title">Fone Bluetooth Pro X</div>
+          <div class="desc">Áudio estéreo, cancelamento de ruído ativo, até 30h de bateria.</div>
+          <div class="price-row">
+            <div class="price">R$ 399,00</div>
+            <div style="display:flex;gap:8px">
+              <button class="btn">Adicionar</button>
+              <button class="secondary">Detalhes</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- produto 2 -->
+        <article class="card">
+          <div class="thumb">Smartwatch</div>
+          <div class="title">Pulseira Smart 4</div>
+          <div class="desc">Monitor cardíaco, GPS integrado e resistência à água.</div>
+          <div class="price-row">
+            <div class="price">R$ 299,00</div>
+            <div style="display:flex;gap:8px">
+              <button class="btn">Adicionar</button>
+              <button class="secondary">Detalhes</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- produto 3 -->
+        <article class="card">
+          <div class="thumb">Camiseta</div>
+          <div class="title">Camiseta Algodão Premium</div>
+          <div class="desc">Corte slim, disponível nos tamanhos P, M, G.</div>
+          <div class="price-row">
+            <div class="price">R$ 89,00</div>
+            <div style="display:flex;gap:8px">
+              <button class="btn">Adicionar</button>
+              <button class="secondary">Detalhes</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- produto 4 -->
+        <article class="card">
+          <div class="thumb">Cafeteira</div>
+          <div class="title">Cafeteira Espresso Mini</div>
+          <div class="desc">Compacta, 15 bar de pressão, preparo rápido.</div>
+          <div class="price-row">
+            <div class="price">R$ 249,00</div>
+            <div style="display:flex;gap:8px">
+              <button class="btn">Adicionar</button>
+              <button class="secondary">Detalhes</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- produto 5 -->
+        <article class="card">
+          <div class="thumb">Mochila</div>
+          <div class="title">Mochila Urbana 20L</div>
+          <div class="desc">Compartimento para notebook 15", USB pass-through.</div>
+          <div class="price-row">
+            <div class="price">R$ 179,00</div>
+            <div style="display:flex;gap:8px">
+              <button class="btn">Adicionar</button>
+              <button class="secondary">Detalhes</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- produto 6 -->
+        <article class="card">
+          <div class="thumb">Mouse</div>
+          <div class="title">Mouse Gamer RGB</div>
+          <div class="desc">7 botões programáveis e sensor 16000 DPI.</div>
+          <div class="price-row">
+            <div class="price">R$ 129,00</div>
+            <div style="display:flex;gap:8px">
+              <button class="btn">Adicionar</button>
+              <button class="secondary">Detalhes</button>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+    </section>
+
+    <aside class="cart" aria-label="Carrinho de compras">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <h2>Carrinho</h2>
+        <div class="small">3 itens</div>
+      </div>
+
+      <div class="cart-items">
+        <div class="cart-item">
+          <div class="ci-thumb">FP</div>
+          <div class="ci-info">
+            <div class="ci-name">Fone Bluetooth Pro X</div>
+            <div class="ci-meta">1 × R$ 399,00</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+            <div class="small">Qtd: 1</div>
+            <button class="secondary">Remover</button>
+          </div>
+        </div>
+
+        <div class="cart-item">
+          <div class="ci-thumb">SM</div>
+          <div class="ci-info">
+            <div class="ci-name">Pulseira Smart 4</div>
+            <div class="ci-meta">1 × R$ 299,00</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+            <div class="small">Qtd: 1</div>
+            <button class="secondary">Remover</button>
+          </div>
+        </div>
+
+        <div class="cart-item">
+          <div class="ci-thumb">CM</div>
+          <div class="ci-info">
+            <div class="ci-name">Camiseta Algodão Premium</div>
+            <div class="ci-meta">1 × R$ 89,00</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+            <div class="small">Qtd: 1</div>
+            <button class="secondary">Remover</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="total-row">
+        <div>
+          <div class="small">Subtotal</div>
+          <div class="price">R$ 787,00</div>
+        </div>
+        <div style="text-align:right">
+          <div class="small">Envio</div>
+          <div class="small">R$ 25,00</div>
+        </div>
+      </div>
+
+      <div class="checkout">
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn" style="flex:1">Finalizar compra</button>
+          <button class="secondary">Continuar comprando</button>
+        </div>
+        <div class="small">Aceitamos cartões, boleto e PIX</div>
+      </div>
+    </aside>
+
+    <footer>
+      <div>© 2025 StoreVendas</div>
+      <div>Suporte · Política de privacidade</div>
+    </footer>
+
+  </div>
+</body>
+</html>
